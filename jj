@@ -1,0 +1,102 @@
+const products = [
+  {
+    id: 1,
+    name: "Raw Arabica Seeds (Green)",
+    category: "Green Seeds",
+    price: 15.00,
+    metric: "Unroasted / High Altitude",
+    notes: ["Floral", "Grassy", "Raw"],
+    image: "https://images.pexels.com/photos/32356370/pexels-photo-32356370.jpeg",
+    description: "Raw, unroasted Arabica seeds perfect for home roasters. These green beans retain all their natural moisture and organic acids, ready to be profiled exactly to your liking."
+  },
+  {
+    id: 2,
+    name: "Sun-Dried Robusta Seeds",
+    category: "Green Seeds",
+    price: 13.50,
+    metric: "Unroasted / Natural Process",
+    notes: ["Earthy", "Woody", "High Caffeine"],
+    image: "https://images.pexels.com/photos/4815900/pexels-photo-4815900.jpeg",
+    description: "Unwashed robusta seeds dried directly in the fruit. These dense green seeds produce an incredibly heavy body and thick crema when roasted for espresso."
+  },
+  {
+    id: 3,
+    name: "Mysuru Estate Peaberry",
+    category: "Single Origin",
+    price: 26.00,
+    metric: "Natural / Peaberry / 1400m",
+    notes: ["Jackfruit", "Cacao Nibs", "Spiced Rum"],
+    image: "https://images.pexels.com/photos/2562555/pexels-photo-2562555.jpeg",
+    description: "A rare genetic mutation where only one round seed grows inside the coffee cherry. Sourced locally from the estates surrounding Mysuru, this bean roasts incredibly evenly and delivers a dense, syrupy cup."
+  },
+  {
+    id: 4,
+    name: "Ethiopia Yirgacheffe",
+    category: "Single Origin",
+    price: 22.00,
+    metric: "Washed / Heirloom / 1900m",
+    notes: ["Jasmine", "Peach", "Black Tea"],
+    image: "https://images.pexels.com/photos/33788268/pexels-photo-33788268.jpeg",
+    description: "Grown in the iron-rich soils of the Kochere micro-region, these beautifully uniform washed beans are celebrated for their bright, tea-like body and intense floral aromatics."
+  },
+  {
+    id: 5,
+    name: "Colombia Supremo",
+    category: "Single Origin",
+    price: 19.50,
+    metric: "Washed / Caturra / 1750m",
+    notes: ["Caramel", "Red Apple", "Milk Chocolate"],
+    image: "https://images.pexels.com/photos/6239866/pexels-photo-6239866.jpeg  ",
+    description: "A staple of the Huila region. The slow maturation at high altitudes creates a large, dense bean that roasts beautifully, highlighting deep caramel sweetness and red fruit acidity."
+  },
+  {
+    id: 6,
+    name: "Thermodynamic Espresso",
+    category: "Blends",
+    price: 24.00,
+    metric: "Omni-Roast / 3-Bean Origin",
+    notes: ["Molasses", "Dark Cherry", "Crema"],
+    image: "https://images.pexels.com/photos/25409661/pexels-photo-25409661.jpeg",
+    description: "Our flagship espresso base. By combining a low-acidity Brazilian natural with a bright Ethiopian washed, we've engineered a blend that punches perfectly through milk while maintaining complex fruit notes."
+  },
+  {
+    id: 7,
+    name: "Algorithmic Dark Roast",
+    category: "Blends",
+    price: 21.00,
+    metric: "Washed / Data-Driven Curve",
+    notes: ["Toffee", "Almond", "Berry Jam"],
+    image: "https://images.pexels.com/photos/7507352/pexels-photo-7507352.jpeg",
+    description: "Engineered using predictive models to map the perfect heat curve. We optimize the airflow parameters minute-by-minute to maximize caramelization without ever tipping into bitterness or ash."
+  },
+  {
+    id: 8,
+    name: "Panama Gesha Reserve",
+    category: "Micro-Lots",
+    price: 65.00,
+    metric: "Washed / Gesha / 1800m",
+    notes: ["Bergamot", "Honeysuckle", "Papaya"],
+    image: "https://images.unsplash.com/photo-1524350876685-274059332603?q=80&w=800&auto=format&fit=crop",
+    description: "One of the rarest coffee seeds in the world. This exceptionally elongated bean requires extreme care during roasting, resulting in a profoundly delicate cup resembling fine Earl Grey tea."
+  },
+  {
+    id: 9,
+    name: "Monsoon Malabar AA",
+    category: "Micro-Lots",
+    price: 28.00,
+    metric: "Monsooned / Kent / 1200m",
+    notes: ["Dark Cocoa", "Tobacco", "Heavy Body"],
+    image: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=1061&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    description: "These raw seeds are exposed to the moisture-laden monsoon winds of the Malabar Coast for months. They swell, turn pale gold, and lose almost all their acidity, creating an incredibly thick and earthy shot."
+  },
+  {
+    id: 10,
+    name: "Pacamara Giant Beans",
+    category: "Micro-Lots",
+    price: 32.00,
+    metric: "Honey Process / Pacamara",
+    notes: ["Plum", "Brown Sugar", "Citrus"],
+    image: "https://images.pexels.com/photos/19749806/pexels-photo-19749806.jpeg",
+    description: "A hybrid seed famous for its massive size. Due to the high surface area, heat penetrates the bean differently during roasting, demanding a specialized curve to unlock its rich plum and brown sugar sweetness."
+  }
+];
