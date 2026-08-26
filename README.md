@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Brewcraft // Precision Coffee & Telemetry
 
-## Getting Started
+![Next.js](https://img.shields.io/badge/Next.js-black?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-black?style=for-the-badge&logo=framer&logoColor=blue)
 
-First, run the development server:
+Brewcraft is a high-performance, data-driven e-commerce web application built for a premium precision coffee roastery. Designed with a strict "dark mode SaaS" aesthetic, the platform bridges the gap between agronomy and thermodynamics, offering an interactive catalog for both raw harvests and professional brewing hardware.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Core Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+*   **Advanced State Management:** Global shopping cart implementation and a multi-step simulated asynchronous checkout flow (inventory verification, encryption, and digital receipt generation) built entirely with React hooks.
+*   **Dynamic Catalog Filtering:** A two-tier filtering system allowing users to seamlessly toggle between "Our Harvest" (consumables) and "Pro Gear" (hardware), with reactive sub-categories.
+*   **Strict Design System:** 
+    *   Consistent `#0a0a0a` backgrounds with `#d97706` amber accents.
+    *   Glassmorphic UI architecture using backdrop-blur utility classes and ultra-low opacity white borders (`bg-white/[0.02]`).
+    *   Data-driven, technical typography leveraging monospace fonts for metrics.
+*   **Framer Motion Animations:** Smooth layout transitions, staggered grid loading, and interactive modal pop-ups that provide a native-app feel.
+*   **Fully Responsive:** Fluid layouts that scale perfectly from mobile devices to ultrawide desktop monitors, anchored by a persistent frosted-glass navigation bar and terminal-style footer.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+*   **Framework:** [Next.js](https://nextjs.org/) (App Router)
+*   **Library:** [React 18](https://react.dev/)
+*   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+*   **Animations:** [Framer Motion](https://www.framer.com/motion/)
+*   **Icons:** [Lucide React](https://lucide.dev/)
 
-## Learn More
+## 🚀 Getting Started
 
-To learn more about Next.js, take a look at the following resources:
+To run this project locally on your machine:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/your-username/brewcraft.git](https://github.com/your-username/brewcraft.git)
