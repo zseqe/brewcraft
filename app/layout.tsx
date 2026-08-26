@@ -6,6 +6,7 @@ import Footer from "./components/footer";
 export const metadata: Metadata = {
   title: "Brewcraft",
   description: "Precision Coffee Roasting",
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
