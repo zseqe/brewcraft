@@ -13,7 +13,10 @@ export default function Navbar() {
     { name: "Overview", href: "/" },
     { name: "Our Story", href: "/about" },
     { name: "Catalog", href: "/services" },
+    { name: "Telemetry", href: "/roast-telemetry" },
+    { name: "Wholesale", href: "/wholesale" },
   ];
+
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/10">

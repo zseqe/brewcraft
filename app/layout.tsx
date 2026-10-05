@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/footer";
+// Changed from "@/components/AmbientGlow" to "./components/AmbientGlow"
+import AmbientGlow from "./components/AmbientGlow"; 
 
 export const metadata: Metadata = {
   title: "Brewcraft",
@@ -16,7 +18,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-[#0a0a0a] text-white antialiased flex flex-col min-h-screen">
+      <body className="text-white antialiased flex flex-col min-h-screen">
+        <AmbientGlow />
         <Navbar />
         <main className="flex-grow pt-20">
           {children}
