@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingBag, Plus, X, ArrowRight, CheckCircle2, Info, Coffee, Cpu, Loader2, Receipt } from "lucide-react";
+import { ShoppingBag, Plus, X, ArrowRight, CheckCircle2, Coffee, Cpu, Loader2, Receipt, Trash2, User } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 // Combined Database (Beans & Gear) - Expanded for easy editing
 const products = [
@@ -120,7 +121,6 @@ const products = [
   },
 
   // --- PRO GEAR (HARDWARE) ---
-  // 1. Machines
   { 
     id: 11, 
     type: "Gear", 
@@ -143,8 +143,6 @@ const products = [
     image: "https://images.pexels.com/photos/34369008/pexels-photo-34369008.jpeg", 
     description: "Cafe-quality espresso at the touch of a button. Automatically grinds, tamps, extracts, and froths milk." 
   },
-  
-  // 2. Grinders
   { 
     id: 13, 
     type: "Gear", 
@@ -167,8 +165,6 @@ const products = [
     image: "https://images.pexels.com/photos/34263263/pexels-photo-34263263.jpeg", 
     description: "Aircraft-grade aluminum body with titanium-coated conical burrs for fast, effortless manual grinding." 
   },
-
-  // 3. Brewing Equipment
   { 
     id: 15, 
     type: "Gear", 
@@ -191,8 +187,6 @@ const products = [
     image: "https://images.pexels.com/photos/30704968/pexels-photo-30704968.jpeg", 
     description: "An iconic piece of design that brews an incredibly clean, tea-like cup of coffee by filtering out all oils and fines." 
   },
-
-  // 4. Espresso Accessories
   { 
     id: 17, 
     type: "Gear", 
@@ -215,8 +209,6 @@ const products = [
     image: "https://images.pexels.com/photos/8936986/pexels-photo-8936986.jpeg", 
     description: "Eliminate human error. This tamper clicks precisely when you hit 30 pounds of pressure, ensuring a perfectly level puck." 
   },
-
-  // 5. Milk & Measurement
   { 
     id: 19, 
     type: "Gear", 
@@ -239,8 +231,6 @@ const products = [
     image: "https://images.pexels.com/photos/7833021/pexels-photo-7833021.jpeg", 
     description: "Measure your dose and yield down to the decigram. Features a rapid-response processor to prevent lag during fast espresso shots." 
   },
-
-  // 6. Kettles & Serving
   { 
     id: 21, 
     type: "Gear", 
@@ -264,18 +254,23 @@ const products = [
     description: "Competition-style ceramic cups with a curved internal base specifically engineered to preserve crema during the pour." 
   }
 ];
+
 const beanCategories = ["All", "Single Origin", "Blends", "Micro-Lots", "Green Seeds"];
 const gearCategories = ["All", "Machines", "Grinders", "Brewing", "Accessories", "Milk Gear", "Measurement", "Kettles", "Serving"];
 
+type CartItem = typeof products[number] & { cartId: string };
+
 export default function Services() {
+  const { user, setShowAuthModal, setAuthTriggerCallback } = useAuth();
+
   const [activeView, setActiveView] = useState("Harvest"); 
   const [activeCategory, setActiveCategory] = useState("All"); 
-  const [cart, setCart] = useState<any[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [addedItem, setAddedItem] = useState<number | null>(null);
-  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<typeof products[number] | null>(null);
 
-  // New Checkout States
+  // Checkout States
   const [isCheckoutProcessing, setIsCheckoutProcessing] = useState(false);
   const [checkoutStep, setCheckoutStep] = useState("");
   const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
@@ -295,21 +290,38 @@ export default function Services() {
   const currentCategories = activeView === "Harvest" ? beanCategories : gearCategories;
   const cartTotal = cart.reduce((sum, item) => sum + item.price, 0);
 
-  const addToCart = (e: React.MouseEvent, product: any) => {
+  const addToCart = (e: React.MouseEvent, product: typeof products[number]) => {
     e.stopPropagation();
-    setCart([...cart, product]);
+    const cartItem: CartItem = { ...product, cartId: `${product.id}-${Date.now()}` };
+    setCart(prev => [...prev, cartItem]);
     setAddedItem(product.id);
     setTimeout(() => setAddedItem(null), 1500);
   };
 
-  // The Checkout Simulation Flow
-  const processCheckout = () => {
-    setFinalTotal(cartTotal);
+  const removeFromCart = (cartId: string) => {
+    setCart(prev => prev.filter(item => item.cartId !== cartId));
+  };
+
+  // Checkout — requires auth
+  const handleCheckoutClick = () => {
+    if (!user) {
+      // Not logged in — show auth modal, then proceed to checkout after login
+      setAuthTriggerCallback(() => () => {
+        setIsCartOpen(false);
+        doCheckout();
+      });
+      setShowAuthModal(true);
+      return;
+    }
     setIsCartOpen(false);
+    doCheckout();
+  };
+
+  const doCheckout = () => {
+    setFinalTotal(cartTotal);
     setIsCheckoutProcessing(true);
     setCheckoutStep("Verifying inventory levels...");
 
-    // Simulated Loading Sequence
     setTimeout(() => {
       setCheckoutStep("Encrypting payment details...");
       setTimeout(() => {
@@ -317,9 +329,8 @@ export default function Services() {
         setTimeout(() => {
           setIsCheckoutProcessing(false);
           setIsOrderConfirmed(true);
-          // Generate a fake but realistic-looking order ID
           setOrderId(`ORD-${Math.floor(Math.random() * 10000)}-${Math.random().toString(36).substring(2, 5).toUpperCase()}`);
-          setCart([]); // Empty the cart
+          setCart([]);
         }, 1500);
       }, 1500);
     }, 1500);
@@ -335,14 +346,19 @@ export default function Services() {
         </div>
         <button 
           onClick={() => setIsCartOpen(true)}
-          className="relative flex items-center gap-3 px-6 py-3 bg-white/[0.02] hover:bg-white/[0.05] border border-white/10 rounded-xl text-white transition-colors shadow-lg"
+          className="relative flex items-center gap-3 px-6 py-3 bg-white/[0.02] hover:bg-white/[0.05] border border-white/10 hover:border-white/20 rounded-xl text-white transition-all shadow-lg group"
         >
-          <ShoppingBag size={20} className="text-[#d97706]" />
+          <ShoppingBag size={20} className="text-[#d97706] group-hover:scale-110 transition-transform" />
           <span className="font-medium">View Cart</span>
           {cart.length > 0 && (
-            <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#d97706] text-white text-xs font-bold flex items-center justify-center">
+            <motion.span
+              key={cart.length}
+              initial={{ scale: 0.6 }}
+              animate={{ scale: 1 }}
+              className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#d97706] text-white text-xs font-bold flex items-center justify-center shadow-lg"
+            >
               {cart.length}
-            </span>
+            </motion.span>
           )}
         </button>
       </div>
@@ -399,7 +415,7 @@ export default function Services() {
                 transition={{ duration: 0.3 }}
                 key={product.id}
                 onClick={() => setSelectedProduct(product)}
-                className="group flex flex-col bg-white/[0.02] border border-white/10 rounded-2xl overflow-hidden hover:border-white/30 transition-all cursor-pointer shadow-lg"
+                className="group flex flex-col bg-white/[0.02] border border-white/10 rounded-2xl overflow-hidden hover:border-white/30 transition-all cursor-pointer shadow-lg hover:shadow-[#d97706]/5"
               >
                 <div className="relative h-56 w-full overflow-hidden">
                   <Image 
@@ -436,6 +452,7 @@ export default function Services() {
                           ? "bg-green-500/20 text-green-500" 
                           : "bg-[#d97706]/10 text-[#d97706] hover:bg-[#d97706] hover:text-white"
                       }`}
+                      title="Add to cart"
                     >
                       {addedItem === product.id ? <CheckCircle2 size={20} /> : <Plus size={20} />}
                     </button>
@@ -526,46 +543,95 @@ export default function Services() {
               <div className="p-6 flex items-center justify-between border-b border-white/10">
                 <h2 className="text-xl font-bold text-white flex items-center gap-2">
                   <ShoppingBag size={20} className="text-[#d97706]" /> Your Order
+                  {cart.length > 0 && (
+                    <span className="text-sm font-normal text-gray-400 ml-1">({cart.length} item{cart.length !== 1 ? "s" : ""})</span>
+                  )}
                 </h2>
-                <button onClick={() => setIsCartOpen(false)} className="text-gray-500 hover:text-white transition">
+                <button onClick={() => setIsCartOpen(false)} className="text-gray-500 hover:text-white transition p-1">
                   <X size={24} />
                 </button>
               </div>
+
+              {/* Auth nudge banner (if not logged in and cart has items) */}
+              {!user && cart.length > 0 && (
+                <div className="mx-4 mt-4 px-4 py-3 rounded-xl bg-[#d97706]/10 border border-[#d97706]/20 flex items-start gap-3">
+                  <User size={16} className="text-[#d97706] mt-0.5 shrink-0" />
+                  <p className="text-xs text-gray-300">
+                    <span className="text-[#d97706] font-semibold">Sign in</span> to track your orders and save your preferences. Or continue as guest.
+                  </p>
+                </div>
+              )}
 
               <div className="flex-1 overflow-y-auto p-6 space-y-4">
                 {cart.length === 0 ? (
                   <div className="h-full flex flex-col items-center justify-center text-gray-500 gap-4">
                     <ShoppingBag size={48} className="opacity-20" />
                     <p>Your cart is empty.</p>
+                    <button
+                      onClick={() => setIsCartOpen(false)}
+                      className="text-sm text-[#d97706] hover:underline"
+                    >
+                      Browse the catalog →
+                    </button>
                   </div>
                 ) : (
-                  cart.map((item, index) => (
-                    <div key={index} className="flex gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/10">
-                      <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0">
-                        <Image src={item.image} alt={item.name} fill className="object-cover" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="text-sm font-bold text-white leading-tight mb-1">{item.name}</h4>
-                        <p className="text-xs text-gray-500 mb-2">{item.type} | {item.category}</p>
-                        <span className="text-sm font-bold text-[#d97706]">${item.price.toFixed(2)}</span>
-                      </div>
-                    </div>
-                  ))
+                  <AnimatePresence>
+                    {cart.map((item) => (
+                      <motion.div
+                        key={item.cartId}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20, height: 0, marginBottom: 0 }}
+                        className="flex gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/10 group"
+                      >
+                        <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0">
+                          <Image src={item.image} alt={item.name} fill className="object-cover" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-sm font-bold text-white leading-tight mb-1 truncate">{item.name}</h4>
+                          <p className="text-xs text-gray-500 mb-2">{item.type} | {item.category}</p>
+                          <span className="text-sm font-bold text-[#d97706]">${item.price.toFixed(2)}</span>
+                        </div>
+                        <button
+                          onClick={() => removeFromCart(item.cartId)}
+                          className="text-gray-600 hover:text-red-400 transition-colors p-1 opacity-0 group-hover:opacity-100 shrink-0 self-start"
+                          title="Remove item"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
                 )}
               </div>
 
               {cart.length > 0 && (
                 <div className="p-6 border-t border-white/10 bg-white/[0.01]">
-                  <div className="flex justify-between items-center mb-6">
+                  <div className="flex justify-between items-center mb-4">
                     <span className="text-gray-400">Subtotal</span>
                     <span className="text-2xl font-bold text-white">${cartTotal.toFixed(2)}</span>
                   </div>
                   <button 
-                    onClick={processCheckout}
-                    className="w-full py-4 rounded-xl bg-[#d97706] hover:bg-[#b45309] text-white font-bold flex items-center justify-center gap-2 transition shadow-lg shadow-[#d97706]/20"
+                    onClick={handleCheckoutClick}
+                    className="w-full py-4 rounded-xl bg-[#d97706] hover:bg-[#b45309] text-white font-bold flex items-center justify-center gap-2 transition shadow-lg shadow-[#d97706]/20 mb-3"
                   >
-                    Proceed to Checkout <ArrowRight size={18} />
+                    {user ? "Proceed to Checkout" : "Sign In & Checkout"} <ArrowRight size={18} />
                   </button>
+                  {!user && (
+                    <button
+                      onClick={() => {
+                        setIsCartOpen(false);
+                        // guest checkout — login as guest then checkout
+                        setAuthTriggerCallback(() => () => {
+                          doCheckout();
+                        });
+                        setShowAuthModal(true);
+                      }}
+                      className="w-full py-3 rounded-xl bg-transparent hover:bg-white/[0.03] border border-white/10 text-gray-400 hover:text-white text-sm font-medium flex items-center justify-center gap-2 transition"
+                    >
+                      <User size={15} /> Continue as Guest
+                    </button>
+                  )}
                 </div>
               )}
             </motion.div>
@@ -573,7 +639,7 @@ export default function Services() {
         )}
       </AnimatePresence>
 
-      {/* NEW: Checkout Processing Modal */}
+      {/* Checkout Processing Modal */}
       <AnimatePresence>
         {isCheckoutProcessing && (
           <motion.div 
@@ -587,7 +653,10 @@ export default function Services() {
               animate={{ scale: 1 }}
               className="bg-[#0a0a0a] border border-white/10 p-12 rounded-2xl flex flex-col items-center text-center shadow-2xl max-w-sm w-full"
             >
-              <Loader2 className="animate-spin text-[#d97706] mb-6" size={48} />
+              <div className="relative mb-6">
+                <Loader2 className="animate-spin text-[#d97706]" size={48} />
+                <div className="absolute inset-0 bg-[#d97706]/20 rounded-full blur-xl" />
+              </div>
               <h3 className="text-xl font-bold text-white mb-2">Processing Secure Checkout</h3>
               <p className="text-gray-400 text-sm animate-pulse">{checkoutStep}</p>
             </motion.div>
@@ -595,7 +664,7 @@ export default function Services() {
         )}
       </AnimatePresence>
 
-      {/* NEW: Order Confirmed Receipt Modal */}
+      {/* Order Confirmed Receipt Modal */}
       <AnimatePresence>
         {isOrderConfirmed && (
           <motion.div 
@@ -609,11 +678,16 @@ export default function Services() {
               animate={{ scale: 1, y: 0 }}
               className="bg-[#0a0a0a] border border-white/10 p-8 rounded-2xl shadow-2xl max-w-md w-full"
             >
-              <div className="w-16 h-16 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-500 mb-6 mx-auto border border-emerald-500/30">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: "spring" }}
+                className="w-16 h-16 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-500 mb-6 mx-auto border border-emerald-500/30"
+              >
                 <CheckCircle2 size={32} />
-              </div>
+              </motion.div>
               
-              <h2 className="text-2xl font-bold text-white text-center mb-2">Order Confirmed</h2>
+              <h2 className="text-2xl font-bold text-white text-center mb-2">Order Confirmed!</h2>
               <p className="text-gray-400 text-center text-sm mb-8">Your items are being prepped for dispatch.</p>
               
               <div className="bg-white/[0.02] border border-white/10 rounded-xl p-6 mb-8">

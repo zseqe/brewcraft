@@ -1,21 +1,36 @@
 {
-  "name": "Brewcraft Systems",
+  "name": "Brewcraft — Precision Coffee",
   "short_name": "Brewcraft",
-  "description": "Precision Coffee Roasting & Telemetry",
+  "description": "Engineered extraction. Precision-roasted, data-backed artisan coffee delivered globally.",
   "start_url": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#0a0a0a",
   "theme_color": "#d97706",
+  "categories": ["shopping", "food"],
+  "lang": "en",
+  "scope": "/",
   "icons": [
     {
-      "src": "/icon-192x192.png", 
+      "src": "/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Shop Now",
+      "short_name": "Catalog",
+      "description": "Browse the Brewcraft catalog",
+      "url": "/services",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
     }
   ]
 }
